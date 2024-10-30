@@ -31,8 +31,10 @@ public class Calculadora {
 		return result;
 	}
 	public static void main(String[] args) {
-		double a = exp(2,-8);
-		System.out.println(a);
-		System.out.printf("%1$f", a);
+		double baseD = exp(2,40);
+		double baseEjercicio = 1 * baseD;
+		double baseB = exp(2,30);
+		double ejercicio2 = 1.2 * baseB;
+		System.out.println(baseEjercicio/ejercicio2);
 	}
 }
