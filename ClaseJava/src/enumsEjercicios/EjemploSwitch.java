@@ -45,6 +45,9 @@ public class EjemploSwitch {
 			break;
 		}
 		System.out.println(numeroDias);
+		for (Mes test : Mes.values()) {
+			System.out.println(test);
+		}
 	}
 
 }
