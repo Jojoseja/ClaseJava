@@ -15,5 +15,6 @@ public class Ejercicio3 {
 	public static void main(String[] args) {
 		String a = parOimpar(6);
 		System.out.println(a);
+		System.out.println(parOimpar(6));
 	}
 }
