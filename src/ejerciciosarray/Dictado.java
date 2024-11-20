@@ -15,7 +15,7 @@ public class Dictado {
 		}if (aparece) {
 			System.out.println("El número " + num + " aparece un total de " + total + " vez/veces");
 		} else {
-			System.out.println("El número "+num+" no aparece en el Array");
+			System.out.println("El número " + num + " no aparece en el Array");
 		}
 	}
 	public static void main(String[] args) {

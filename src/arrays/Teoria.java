@@ -3,7 +3,7 @@ package arrays;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class teoria {
+public class Teoria {
 	static Scanner sc = new Scanner(System.in);
 	static double media(){
 		System.out.println("Escribe un número: ");
