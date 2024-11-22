@@ -32,6 +32,8 @@ public class Ejercicio13 {
 			if (i % 2 == 0) {
 				paresArray = Arrays.copyOf(paresArray, paresArray.length+1);
 				paresArray[paresArray.length-1] = i;
+				
+				paresArray[i] = i;
 			}
 		}
 		

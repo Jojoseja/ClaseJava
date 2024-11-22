@@ -1,52 +1,48 @@
 package tictactoe;
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Arrays;
+//Si una vez iniciado el juego se introduce: 1X, 2O, 3X, 50, el número {4} deja de estar disponible
 
 public class Main {
+	
 	static Scanner sc = new Scanner(System.in);
-	
-	static void menu() {
-		boolean menuB = true;
+	//Metodo para iniciar un menu
+	static void menuOpciones() {
+		boolean menuAbierto = true;
 		do {
-			System.out.println("Selecciona una opción");
-			int input = sc.nextInt();	
-			switch (input) {
+			System.out.println("Opcion 1 tictactoe, opcion 2 cerrar");
+			int input = sc.nextInt();
+			switch(input) {
 			case 1:
-				menuB = false;
-				System.out.println("Bye");
+				tictactoe();
 				break;
-			default:
-				System.out.println("Nada");
+			case 2:
+				menuAbierto = false;
+			
 			}
-		} while (menuB);
+		} while(menuAbierto);
 	}
-	
-	static String[][] invArray(String[][] gameStatus) {
-		String[][] gameStatus2 = Arrays.copyOf(gameStatus, gameStatus.length);
-
-		for (int j = 0; j < gameStatus.length; j++) {
-			for(int k = 0; k < gameStatus.length; k++) {
-				gameStatus2[k][j] = gameStatus[j][k];
-			}
-		}
-		return gameStatus2;
+	// Metodo para mostrar por pantalla el estado actual de la partida
+	static void showScreen(String[][] gamelist) {
+		
+		System.out.println("| " + gamelist[0][0] + " | " + gamelist[0][1] + " | " + gamelist[0][2] + " |");
+		System.out.println("------------");
+		System.out.println("| " + gamelist[1][0] + " | " + gamelist[1][1] + " | " + gamelist[1][2] + " |");
+		System.out.println("------------");
+		System.out.println("| " + gamelist[2][0] + " | " + gamelist[2][1] + " | " + gamelist[2][2] + " |");
 		
 	}
-	private static boolean winnerCheck(String[][] gameStatus) {
-		boolean result = false;
-		String[] valid1 = {"X","X","X"};
-		String[] valid2 = {"O","O","O"};
-		String[][] gameSta1 = gameStatus;
-		for (String[] i : gameSta1) {
-			if (Arrays.equals(i, valid1) || Arrays.equals(i, valid2)) {
-				result = true;
-			}
-		}
-		return result;
-	}
 	
-	private static boolean checkValid(int input, String[][]gameStat) {
-		String[][] gameStatus = gameStat;
+	//Metodo para generar un tablero "Vacio"
+	static String[][] createGame(){
+		
+		String[][] a = {{"1","2","3"},{"4","5","6"},{"7","8","9"}};
+		return a;
+		
+	}	
+	
+	//Metodo para comprobar que el numero que se escoja no haya sido escogido previamente
+	static boolean checkValid(int input, String[][]gameStatus) {
 		boolean result = true;
 		switch(input) {
 		case 1:
@@ -94,97 +90,154 @@ public class Main {
 			}
 			break;
 		default:
+			System.out.println("Numero incorrecto");
 			result = false;
-			break;
 		}
 		return result;
 		}
-		
-	static String[][] gameCreator(){
-		String[][] a = {{"1","2","3"},{"4","5","6"},{"7","8","9"}};
-		return a;
-	}	
-	static void gameStart() {
-		String[][] game = gameCreator();
-		int turn = 0;
-		String wri;
+	
+	
+	//Metodo que devuelve el valor de un numero en caso de que DICHO NUMERO este disponible
+	static int validInput(String[][] gameStatus) {
+		boolean validNumber = false;
 		int input;
-		boolean winner = true;
-		if (!winnerCheck(game) || !winnerCheck(invArray(game))) {
-			winner = false;
-		}
-			
 		do {
+			System.out.println("Escribe un numero");
+			input = sc.nextInt();
+			validNumber = checkValid(input,gameStatus);
 			
-			if (turn == 0) {
-				System.out.println("Turno Player 1");
-				wri = "X";
-				turn = 1;
-			} else {
-				System.out.println("Turno Player 2");
-				wri = "O";
-				turn = 0;
+		}
+		while(!validNumber);
+		return input;
+	}
+	
+	
+	//Metodo para comprobar si alguien ha ganado en HORIZONTAL
+	static boolean checkLane(String[][] gameStatus) {
+		boolean result = false;
+		String[] valid1 = {"X","X","X"};
+		String[] valid2 = {"O","O","O"};
+		String[][] gameSta1 = gameStatus;
+		for (String[] i : gameSta1) {
+			if (Arrays.equals(i, valid1) || Arrays.equals(i, valid2)) {
+				result = true;
 			}
-			do {
-				System.out.println("Escribe donde quieres poner el:" + wri);
-				pantalla(game);
-				input = sc.nextInt();
-				 }
-			while (!checkValid(input,game));
-			
-			
+		}
+		return result;
+	}
+	
+	//Metodo para comprobar si alguien ha ganado en DIAGONAL
+	static boolean checkDia(String[][] gameStatus) {
+		boolean winner = false;
+		String[] valid1 = {"X","X","X"};
+		String[] valid2 = {"O","O","O"};
+		
+		String[] dia1 = new String[3];
+		dia1[0] = gameStatus[0][0];
+		dia1[1] = gameStatus[1][1];
+		dia1[2] = gameStatus[2][2];
+
+		String[] dia2 = new String[3];
+		dia2[0] = gameStatus[0][2];
+		dia2[1] = gameStatus[1][1];
+		dia2[2] = gameStatus[2][0];
+		if (Arrays.equals(dia1, valid1)||Arrays.equals(dia2, valid1)||Arrays.equals(dia1, valid2)||Arrays.equals(dia2, valid2) ) {
+			winner = true;
+		}
+		return winner;
+	}
+	
+	//Metodo para invertir el Array, de forma que los VERTICALES pasan a ser HORIZONTALES
+	static String[][] invArray(String[][]gameStatus) {
+		String[][] invertedArray = new String[3][3];
+		for (int i = 0; i < gameStatus.length; i++) {
+			for (int j = 0; j < gameStatus.length; j++) {
+				invertedArray[i][j] = gameStatus[j][i];
+			}
+		}
+		return invertedArray;
+	}
+	
+	//Metodo para comprobar si alguien ha ganado en HORIZONTAL, VERTICAL o en DIAGONAL
+	static boolean checkWin(String[][]gameStatus) {
+		boolean winner = false;
+		String [][] invArray = invArray(gameStatus);
+		if (checkLane(gameStatus) || checkLane(invArray) || checkDia(gameStatus) ) {
+			winner = true;;
+		}
+		return winner;
+	}
+	
+	//Metodo para el juego como tal
+	static void tictactoe() {
+		String[][] gameStatus = createGame();
+		showScreen(gameStatus);
+		boolean turnX = true;
+		boolean gameOver = false;
+		String turnInput;
+		int turn = 0;
+		
+		do {
+			if (turnX) {
+				System.out.println("Turno Jugador X");
+				turnInput = "X";
+				turnX = false;
+		} else {
+			System.out.println("Turno Jugador O");
+			turnInput = "O";
+			turnX = true;
+			}
+			int input = validInput(gameStatus);
 			switch(input) {
 			case 1:
-				game[0][0] = wri;
+				gameStatus[0][0] = turnInput;
 				break;
 			case 2:
-				game[0][1] = wri;
+				gameStatus[0][1] = turnInput;
 				break;
 			case 3:
-				game[0][2] = wri;
+				gameStatus[0][2] = turnInput;
 				break;
 			case 4:
-				game[1][0] = wri;
+				gameStatus[1][0] = turnInput;
 				break;
 			case 5:
-				game[1][1] = wri;
+				gameStatus[1][1] = turnInput;
 				break;
 			case 6:
-				game[1][2] = wri;
+				gameStatus[1][2] = turnInput;
 				break;
 			case 7:
-				game[2][0] = wri;
+				gameStatus[2][0] = turnInput;
 				break;
 			case 8:
-				game[2][1] = wri;
+				gameStatus[2][1] = turnInput;
 				break;
 			case 9:
-				game[2][2] = wri;
+				gameStatus[2][2] = turnInput;
 				break;
 			default:
 				break;
 				
 			}
-			
+			showScreen(gameStatus);
+			turn += 1;
+			if (checkWin(gameStatus)) {
+				System.out.println("Hay ganador!");
+				gameOver = true;
+			} else if (turn >= 9) {
+				System.out.println("Empate!");
+				gameOver = true;
 			}
-		while(!winner);
-		
-	}
-	
-	static void pantalla(String[][] gamelist) {
-		
-		System.out.println("| " + gamelist[0][0] + " | " + gamelist[0][1] + " | " + gamelist[0][2] + " |");
-		System.out.println("------------");
-		System.out.println("| " + gamelist[1][0] + " | " + gamelist[1][1] + " | " + gamelist[1][2] + " |");
-		System.out.println("------------");
-		System.out.println("| " + gamelist[2][0] + " | " + gamelist[2][1] + " | " + gamelist[2][2] + " |");
+		}
+		while(!gameOver);
+
 	}
 	
 	
 	public static void main(String[] args) {
-		gameStart();
-		System.out.println("Hello");
-		//String [][] b  = {{"1","2","3"},{"4","5","6"},{"7","8","9"}}; 
-		//String[][]a = invArray(b);
+		menuOpciones();
+
 	}
+		
 }
