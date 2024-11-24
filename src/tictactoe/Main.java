@@ -64,6 +64,7 @@ public class Main {
 			if (gameStatus[1][0] == "X" || gameStatus[1][0] == "O") {
 				result = false;
 			}
+			break;
 		case 5:
 			if (gameStatus[1][1] == "X" || gameStatus[1][1] == "O") {
 				result = false;
