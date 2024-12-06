@@ -7,7 +7,7 @@ import java.util.Scanner;
 Introduzca una opción:
 	1) Saludo
 	2) Nombre
-0) Salir
+	0) Salir
 
 La opción 1 imprime “Hola” y vuelve a mostrar el menú.
 La opción 2 imprime “Soy Java” y vuelve a mostrar el menú.
@@ -37,7 +37,7 @@ public class Ejercicio3 {
 			}
 			
 			
-		} while (menu == true); 
+		} while (menu); 
 	}
 	public static void main(String[] args) {
 		menuOpciones();
